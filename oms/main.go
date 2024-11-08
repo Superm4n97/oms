@@ -11,8 +11,8 @@ func main() {
 	defer database.CloseDB()
 
 	r := gin.Default()
-	r.GET("/product/order", handlers.GetProduct)
-	r.POST("/product/order", handlers.CreateProduct)
+	r.GET("/product/orders", handlers.GetOrders)
+	r.POST("/product/order", handlers.CreateOrder)
 
 	r.Run(":9090")
 }

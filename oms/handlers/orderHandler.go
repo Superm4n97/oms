@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetProduct(c *gin.Context) {
+func GetOrders(c *gin.Context) {
 	rows, err := database.DB.Query(context.Background(), "SELECT id, username, description FROM orders")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
@@ -30,17 +30,17 @@ func GetProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, orders)
 }
 
-func CreateProduct(c *gin.Context) {
-	var user models.Order
-	if err := c.ShouldBindJSON(&user); err != nil {
+func CreateOrder(c *gin.Context) {
+	var order models.Order
+	if err := c.ShouldBindJSON(&order); err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (username, description) VALUES ($1, $2)", user.Username, user.Description)
+	_, err := database.DB.Exec(context.Background(), "INSERT INTO orders (username, description) VALUES ($1, $2)", order.Username, order.Description)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"status": "User created"})
+	c.JSON(http.StatusCreated, gin.H{"status": "Order created"})
 }

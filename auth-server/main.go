@@ -11,8 +11,8 @@ func main() {
 	defer database.CloseDB()
 
 	r := gin.Default()
-	r.GET("/users", handlers.GetUsers)
-	r.POST("/users", handlers.CreateUser)
+	r.GET("/auth/users", handlers.GetUsers)
+	r.POST("/auth/users", handlers.CreateUser)
 
 	r.Run(":8080")
 }

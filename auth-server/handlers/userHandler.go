@@ -10,7 +10,7 @@ import (
 )
 
 func GetUsers(c *gin.Context) {
-	rows, err := database.DB.Query(context.Background(), "SELECT id, name, email FROM users")
+	rows, err := database.DB.Query(context.Background(), "SELECT id, username, email,password FROM users")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -20,7 +20,7 @@ func GetUsers(c *gin.Context) {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		err := rows.Scan(&user.ID, &user.Username, &user.Email)
+		err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.Password)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 			return
@@ -37,7 +37,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", user.Username, user.Email, user.Password)
+	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", user.Username, user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return

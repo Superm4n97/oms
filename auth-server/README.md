@@ -10,7 +10,7 @@ DB_CONN=""
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50),
-    email VARCHAR(100)
+    email VARCHAR(100),
     password VARCHAR(100)
 );
 

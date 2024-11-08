@@ -16,5 +16,5 @@ CREATE TABLE orders (
 # export envs
 DB_CONN="postgres://postgres:postgres@localhost:5432/oms"
 # run server
-go run ./auth-server/main.go
+go run ./oms/main.go
 ```
