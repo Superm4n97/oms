@@ -7,11 +7,10 @@ DB_CONN=""
 ### run
 ```shell
 # go to pgadmin and create a table with username
-CREATE TABLE users (
+CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50),
-    email VARCHAR(100)
-    password VARCHAR(100)
+    description VARCHAR(100)
 );
 
 # export envs

@@ -37,7 +37,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (name, email, password) VALUES ($1, $2)", user.Username, user.Email, user.Password)
+	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)", user.Username, user.Email, user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
