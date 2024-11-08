@@ -12,7 +12,7 @@ import (
 func GetUsers(c *gin.Context) {
 	rows, err := database.DB.Query(context.Background(), "SELECT id, name, email FROM users")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to fetch users"})
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	defer rows.Close()
@@ -20,9 +20,9 @@ func GetUsers(c *gin.Context) {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		err := rows.Scan(&user.ID, &user.Name, &user.Email)
+		err := rows.Scan(&user.ID, &user.Username, &user.Email)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error reading users"})
+			c.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
 		users = append(users, user)
@@ -33,13 +33,13 @@ func GetUsers(c *gin.Context) {
 func CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (name, email) VALUES ($1, $2)", user.Name, user.Email)
+	_, err := database.DB.Exec(context.Background(), "INSERT INTO users (name, email, password) VALUES ($1, $2)", user.Username, user.Email, user.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error inserting user"})
+		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"status": "User created"})

@@ -4,12 +4,17 @@ import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"log"
+	"os"
 )
 
 var DB *pgxpool.Pool
 
 func ConnectDB() {
-	connString := "postgres://username:password@localhost:5432/dbname"
+	connString, found := os.LookupEnv("DB_CONN")
+	if !found {
+		connString = "postgres://postgres:postgres@localhost:5432/postgres"
+	}
+
 	var err error
 	DB, err = pgxpool.New(context.Background(), connString)
 	if err != nil {
