@@ -1,9 +1,7 @@
 # auth server
 ### envs
 ```shell
-REDIS_PASSWORD="redis"
-REDIS_URL="localhost:6379"
-REDIS_USERNAME="default"
+                                                                                                                                                                            b 
 ```
 ### run
 ```shell
@@ -13,7 +11,7 @@ CREATE TABLE orders (
     username VARCHAR(50),
     description VARCHAR(100)
 );
-
+ 
 # export envs
 DB_CONN="postgres://postgres:postgres@localhost:5432/oms"
 # run server
