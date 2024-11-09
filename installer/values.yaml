@@ -1,0 +1,12 @@
+postgres:
+#  url: localhost
+  url: oms-postgres.oms.svc.cluster.local
+  username: postgres
+  password: postgres
+  db: oms
+  replicas: 1
+authServer:
+  replicaCount: 1
+  image:
+    repository: superm4n/auth-server
+    tag: "latest"
