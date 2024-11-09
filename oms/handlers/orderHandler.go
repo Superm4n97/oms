@@ -4,6 +4,9 @@ import (
 	"context"
 	"github.com/Superm4n97/oms/oms/database"
 	"github.com/Superm4n97/oms/oms/models"
+	"github.com/Superm4n97/oms/order-processor/handlers"
+	"github.com/Superm4n97/oms/order-processor/queue"
+	"k8s.io/klog/v2"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -39,6 +42,11 @@ func CreateOrder(c *gin.Context) {
 
 	_, err := database.DB.Exec(context.Background(), "INSERT INTO orders (username, description) VALUES ($1, $2)", order.Username, order.Description)
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+	if err = queue.PushToQueue(handlers.OrderQueue, order); err != nil {
+		klog.Error(err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
