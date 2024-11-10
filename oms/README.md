@@ -3,6 +3,9 @@
 ```shell
 # postgres db connection string, default: "postgres://postgres:postgres@localhost:5432/oms"
 DB_CONN=""
+REDIS_URL=""
+REDIS_USERNAME=""
+REDIS_PASSWORD=""
 ```
 ### run
 ```shell

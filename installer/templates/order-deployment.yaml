@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.orderServer.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.orderServer.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: oms-order-server
+  template:
+    metadata:
+      labels:
+        app: oms-order-server
+    spec:
+      containers:
+        - name: order-server
+          image: "{{ .Values.orderServer.app.image.repository }}:{{ .Values.orderServer.app.image.tag }}"
+          env:
+            - name: DB_CONN
+              value: "postgres://{{.Values.postgres.username }}:{{.Values.postgres.password }}@{{ .Release.Name }}-postgres.{{ .Release.Namespace }}.svc.cluster.local:5432/{{.Values.postgres.db }}"
+            - name: REDIS_URL
+              value: {{ .Values.redis.serviceName }}.{{ .Release.Namespace }}:6379
+            - name: REDIS_USERNAME
+              value: {{ .Values.redis.username }}
+            - name: REDIS_PASSWORD
+              value: {{ .Values.redis.password }}
+          ports:
+            - containerPort: 9090

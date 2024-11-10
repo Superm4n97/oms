@@ -1,5 +1,11 @@
 # oms
 ## run
+### install redis
+```shell
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install redis -n oms bitnami/redis --set auth.enabled=false
+```
 ### install oms chart
 * Clone this GitHub repository
 * run the following helm command to oms system
@@ -9,7 +15,7 @@
 ### create postgres tables
 ```shell
 #exec in postgres database pod
-kubectl exec kubectl exec -it -n oms oms-postgres-586957879f-b92vt bash
+kubectl exec -it -n oms oms-postgres-586957879f-b92vt bash
 
 #open psql console
 psql -U postgres -d oms
@@ -20,7 +26,7 @@ CREATE TABLE users (
     username VARCHAR(50),
     email VARCHAR(100),
     password VARCHAR(100)
-);  
+);
 #order table
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
@@ -34,10 +40,16 @@ CREATE TABLE orders (
 helm repo add kong https://charts.konghq.com
 helm repo update
 helm install kong kong/ingress -n oms --create-namespace --set gateway.image.repository=kong --set gateway.image.tag="3.8.0"
+
+#port forward gateway proxy to use it locally 
 kubectl port-forward -n oms service/kong-gateway-proxy 8000:80
 ```
 
 ### uninstall
+* uninstall redis
+  ```shell
+  helm uninstall -n oms redis
+  ```
 * uninstall kong proxy server
   ```shell
   helm uninstall -n oms kong

@@ -1,19 +1,16 @@
 # auth server
 ### envs
 ```shell
-                                                                                                                                                                            b 
+REDIS_URL=""
+REDIS_USERNAME=""
+REDIS_PASSWORD=""
 ```
 ### run
 ```shell
-# go to pgadmin and create a table with username
-CREATE TABLE orders (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50),
-    description VARCHAR(100)
-);
- 
 # export envs
-DB_CONN="postgres://postgres:postgres@localhost:5432/oms"
+REDIS_URL="localhost:6379"
+REDIS_USERNAME="default"
+REDIS_PASSWORD="redis"
 # run server
 go run ./oms/main.go
 ```

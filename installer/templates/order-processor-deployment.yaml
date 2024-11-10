@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.orderProcessor.app.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.orderProcessor.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: oms-order-processor
+  template:
+    metadata:
+      labels:
+        app: oms-order-processor
+    spec:
+      containers:
+        - name: order-processor
+          image: "{{ .Values.orderProcessor.app.image.repository }}:{{ .Values.orderProcessor.app.image.tag }}"
+          env:
+            - name: REDIS_URL
+              value: {{ .Values.redis.serviceName }}.{{ .Release.Namespace }}:6379
+            - name: REDIS_USERNAME
+              value: {{ .Values.redis.username }}
+            - name: REDIS_PASSWORD
+              value: {{ .Values.redis.password }}
+          ports:
+            - containerPort: 7070

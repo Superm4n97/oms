@@ -17,3 +17,10 @@ spec:
                   number: 8080
             path: /auth
             pathType: Prefix
+          - backend:
+              service:
+                name: {{ .Values.orderServer.app.name }}
+                port:
+                  number: 9090
+            path: /product
+            pathType: Prefix
