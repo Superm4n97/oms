@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.authServer.app.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: oms-auth-server
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: oms-auth-server

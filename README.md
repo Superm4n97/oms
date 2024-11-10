@@ -1,7 +1,7 @@
 # oms
 ## run
 ### install oms chart
-* Clone the Github repository
+* Clone this GitHub repository
 * run the following helm command to oms system
     ```shell
     helm upgrade -i oms ./installer -n oms
@@ -28,8 +28,21 @@ CREATE TABLE orders (
     description VARCHAR(100)
 );
 ```
-### uninstall oms chart
-* to uninstall the chart
+
+### install kong
+```shell
+helm repo add kong https://charts.konghq.com
+helm repo update
+helm install kong kong/ingress -n oms --create-namespace --set gateway.image.repository=kong --set gateway.image.tag="3.8.0"
+kubectl port-forward -n oms service/kong-gateway-proxy 8000:80
+```
+
+### uninstall
+* uninstall kong proxy server
+  ```shell
+  helm uninstall -n oms kong
+  ```
+* uninstall oms chart
   ```shell
   helm uninstall oms -n oms
   ```

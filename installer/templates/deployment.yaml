@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-auth-server
+  name: {{ .Values.authServer.app.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.authServer.replicaCount }}
+  replicas: {{ .Values.authServer.app.replicaCount }}
   selector:
     matchLabels:
       app: oms-auth-server
@@ -15,9 +15,9 @@ spec:
     spec:
       containers:
         - name: auth-server
-          image: "{{ .Values.authServer.image.repository }}:{{ .Values.authServer.image.tag }}"
+          image: "{{ .Values.authServer.app.image.repository }}:{{ .Values.authServer.app.image.tag }}"
           env:
             - name: DB_CONN
-              value: "postgres://{{.Values.postgres.username }}:{{.Values.postgres.password }}@{{.Values.postgres.url }}:5432/{{.Values.postgres.db }}"
+              value: "postgres://{{.Values.postgres.username }}:{{.Values.postgres.password }}@{{ .Release.Name }}-postgres.{{ .Release.Namespace }}.svc.cluster.local:5432/{{.Values.postgres.db }}"
           ports:
             - containerPort: 8080

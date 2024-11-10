@@ -1,12 +1,16 @@
+authServer:
+  service:
+    port: 8080
+  app:
+    name: auth-server
+    replicaCount: 1
+    image:
+      repository: superm4n/auth-server
+      tag: "latest"
 postgres:
-#  url: localhost
-  url: oms-postgres.oms.svc.cluster.local
+  #  url: localhost
+  #  url: oms-postgres.oms.svc.cluster.local #postgres service url
   username: postgres
   password: postgres
   db: oms
   replicas: 1
-authServer:
-  replicaCount: 1
-  image:
-    repository: superm4n/auth-server
-    tag: "latest"
