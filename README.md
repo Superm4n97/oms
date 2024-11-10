@@ -68,28 +68,50 @@ Auth Server will provide you user authentication related information, such as:
 * get token
 
 ### create new user
-`/auth/user [POST]` api endpoint will create a new user. Payload of the parameter will be
+`/auth/users [POST]` api endpoint will create a new user. 
 
-```json
-{
-  "username": "foobar",
-  "password": "1234"
-}
+Example:
+```shell
+curl -H 'Content-Type: application/json' \
+-d '{ "username":"rasel","password":"1234"}' \
+-X POST \
+localhost:8000/auth/users
 ```
 ### get users
-`/auth/user [GET]` api endpoint will get the list of users.
+`/auth/users [GET]` api endpoint will get the list of users.
 
-### get token
-`/auth/user/:<username> [GET]` api endpoint will generate the token for user _**username**_.
+Example:
+```shell
+curl localhost:8000/auth/users
+```
 
 ## Order Management Server
 
 ### create new user
-`/product/order [POST]` api endpoint will create a new user. Payload of the parameter will be
+`/product/order [POST]` api endpoint will create a new order. It will push the order in a queue and instantly return the created response.
 
-```json
-{
-  "username": "foobar",
-  "description": "order for food"
-}
+```shell
+curl -H 'Content-Type: application/json' \
+-d '{ "username":"rasel","password":"1234"}' \
+-X POST \
+localhost:8000/product/order
 ```
+### get order list
+`/product/orders [GET]` wil return the list of the orders.
+Example:
+```shell
+curl localhost:8000/product/orders
+```
+
+## Order and Notification Queue
+* Order Queue
+* Notification Queue
+
+Used [Asynq](https://github.com/hibiken/asynq) to maintain the distributed queues. Order Queue will maintain the orders which needs to be served. 
+Notification Queue have the order ready notification. So that user can be notified when the order is ready.
+
+**_Asynq_** uses redis to maintain the queue.
+
+## Order Processor
+It's an independent server which will fetch orders from **_Order Queue_** and process them. Once it processes an order it will push 
+a notification to the **_Notification Queue_**. 
